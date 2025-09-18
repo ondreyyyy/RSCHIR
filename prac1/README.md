@@ -11,7 +11,3 @@ docker compose up -d
 ```
 docker-compose up -d
 ```
-# 3 шаг - инициализация БД
-```
-docker exec -i mysql-db mysql -uroot -prootpass < init.sql
-```
