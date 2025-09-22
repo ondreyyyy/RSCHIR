@@ -19,8 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div class="nav-buttons">
     <a href="index.php">Список</a>
-    <a href="update.php?id=1">Редактировать</a>
-    <a href="delete.php?id=1">Удалить</a>
+    <a href="update.php">Редактировать</a>
+    <a href="delete.php">Удалить</a>
 </div>
 
 <form method="post">
@@ -30,3 +30,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </form>
 </body>
 </html>
+
