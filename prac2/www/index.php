@@ -20,8 +20,5 @@ foreach ($result as $row){
     <a href="delete.php">Удалить</a>
 </div>
 </table>
-<?php
-phpinfo();
-?>
 </body>
 </html>
