@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
-<h1>Таблица пользователей данного продукта</h1>
+<h1>Таблица студентов</h1>
 <table>
     <tr><th>Id</th><th>Name</th><th>Surname</th></tr>
 <?php
