@@ -35,10 +35,10 @@ if (isset($_GET['id']) && !isset($_GET['confirm'])) {
     }
 }
 ?>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Удалить студента</title>
+    <title>Delete page</title>
     <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
@@ -67,4 +67,5 @@ if (isset($_GET['id']) && !isset($_GET['confirm'])) {
 </body>
 
 </html>
+
 
