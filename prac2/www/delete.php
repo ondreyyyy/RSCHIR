@@ -1,7 +1,7 @@
 <?php
 $mysqli = new mysqli("db", "user", "password", "appDB");
 
-// удаление пользователя только если подтверждено
+// удаление студента только если подтверждено
 if (isset($_GET['id']) && isset($_GET['confirm']) && $_GET['confirm'] == 'yes') {
     $id = (int)$_GET['id'];
     $mysqli->query("DELETE FROM users WHERE ID=$id");
@@ -25,7 +25,7 @@ if (isset($_GET['id']) && !isset($_GET['confirm'])) {
         </head>
         <body>
         <h1>Подтверждение удаления</h1>
-        <p>Вы действительно хотите удалить пользователя: <?php echo htmlspecialchars($user['name']) . ' ' . htmlspecialchars($user['surname']); ?>?</p>
+        <p>Вы действительно хотите удалить студента: <?php echo htmlspecialchars($user['name']) . ' ' . htmlspecialchars($user['surname']); ?>?</p>
         <a href='delete.php?id=<?php echo $id; ?>&confirm=yes'>Да, удалить</a> | 
         <a href='delete.php'>Нет, отмена</a>
         </body>
@@ -38,11 +38,11 @@ if (isset($_GET['id']) && !isset($_GET['confirm'])) {
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Удалить пользователя</title>
+    <title>Удалить студента</title>
     <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
-<h1>Удаление пользователя</h1>
+<h1>Удаление студента</h1>
 
 <div class="nav-buttons">
     <a href="index.php">Список</a>
@@ -50,7 +50,7 @@ if (isset($_GET['id']) && !isset($_GET['confirm'])) {
     <a href="update.php">Редактировать</a>
 </div>
 
-<h2>Выберите пользователя для удаления:</h2>
+<h2>Выберите студента для удаления:</h2>
 <ul>
     <?php
     $result = $mysqli->query("SELECT * FROM users ORDER BY ID ASC");
@@ -65,4 +65,5 @@ if (isset($_GET['id']) && !isset($_GET['confirm'])) {
     ?>
 </ul>
 </body>
+
 </html>
