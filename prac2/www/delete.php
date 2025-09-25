@@ -60,10 +60,11 @@ if (isset($_GET['id']) && !isset($_GET['confirm'])) {
                  " <a href='delete.php?id=" . $row['ID'] . "'>Удалить</a></li>";
         }
     } else {
-        echo "<li>Нет пользователей для удаления</li>";
+        echo "<li>Нет студентов для удаления</li>";
     }
     ?>
 </ul>
 </body>
 
 </html>
+
