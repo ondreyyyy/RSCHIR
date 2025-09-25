@@ -2,7 +2,7 @@
 $mysqli = new mysqli("db", "user", "password", "appDB");
 $user = null;
 
-// если выбран пользователь через get загружаем его данные
+// если выбран студент через get загружаем его данные
 if (isset($_GET['id'])) {
     $id = (int)$_GET['id'];
     $result = $mysqli->query("SELECT * FROM users WHERE ID=$id");
@@ -22,11 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Редактировать пользователя</title>
+    <title>Редактировать студента</title>
     <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
-<h1>Редактирование пользователя</h1>
+<h1>Редактирование студента</h1>
 
 <div class="nav-buttons">
     <a href="index.php">Список</a>
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
     </form>
     <p><a href="update.php">← Вернуться к списку</a></p>
 <?php else: ?>
-    <h2>Выберите пользователя для редактирования:</h2>
+    <h2>Выберите студента для редактирования:</h2>
     <ul>
         <?php
         $result = $mysqli->query("SELECT * FROM users ORDER BY ID ASC");
@@ -55,4 +55,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
     </ul>
 <?php endif; ?>
 </body>
+
 </html>
