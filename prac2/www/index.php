@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-<title>Hello world page</title>
+<title>Read page</title>
     <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
