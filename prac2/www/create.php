@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <link rel="stylesheet" href="style.css?v=1" type="text/css"/>
 </head>
 <body>
-<h1>Добавить пользователя</h1>
+<h1>Добавить студента</h1>
 
 <div class="nav-buttons">
     <a href="index.php">Список</a>
@@ -30,4 +30,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </form>
 </body>
 </html>
+
 
