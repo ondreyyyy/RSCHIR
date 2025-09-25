@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <html lang="en">
 <head>
-<title>Create User</title>
+<title>Create page</title>
 <link rel="stylesheet" href="style.css?v=1" type="text/css"/>
 </head>
 <body>
@@ -30,5 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </form>
 </body>
 </html>
+
 
 
