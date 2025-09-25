@@ -19,10 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
     exit;
 }
 ?>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Редактировать студента</title>
+    <title>Update page</title>
     <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
@@ -57,3 +57,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
 </body>
 
 </html>
+
