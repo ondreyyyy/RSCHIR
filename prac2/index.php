@@ -23,7 +23,7 @@
             </div>
             
             <div class="service-card">
-                <h2></span>Admin</h2>
+                <h2>Admin</h2>
                 <a href="admin/" class="btn">Перейти к Admin</a>
             </div>
         </div>
