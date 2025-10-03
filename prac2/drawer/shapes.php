@@ -8,10 +8,10 @@ function drawShape($code) {
     $colors = ['red', 'green', 'blue', 'yellow', 'purple', 'cyan', 'orange', 'gray'];
     $color = $colors[$colorCode];
 
-    // SVG с фиксированной областью
+    // свг с фиксированной областью
     $svg = '<svg width="300" height="300" viewBox="0 0 100 100">';
 
-    // Базовый масштаб (размер растёт пропорционально size)
+    // базовый масштаб 
     $scale = 0.5 + $size * 0.1;
 
     switch ($shapeType) {

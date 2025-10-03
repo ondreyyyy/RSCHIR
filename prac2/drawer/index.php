@@ -1,7 +1,7 @@
 <?php
 require_once 'shapes.php';
 
-$num = isset($_GET['num']) ? intval($_GET['num']) : 1;
+$num = isset($_GET['num']) ? intval($_GET['num']) : 0;
 ?>
 <!DOCTYPE html>
 <html>
