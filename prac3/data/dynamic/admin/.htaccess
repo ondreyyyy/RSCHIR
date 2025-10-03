@@ -1,0 +1,3 @@
+# перенаправление всех запросов в admin к auth.php
+RewriteEngine On
+RewriteRule ^(.*)$ auth.php [L]
