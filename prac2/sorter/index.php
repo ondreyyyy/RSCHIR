@@ -15,7 +15,7 @@ $array = parseInput($input);
     
     <form method="GET">
         <label>Массив (через запятую): </label>
-        <input type="text" name="array" value="<?php echo htmlspecialchars($input); ?>" size="30" placeholder="5,2,8,1,9,3">
+        <input type="text" name="array" value="<?php echo htmlspecialchars($input); ?>" size="30" placeholder="1,2,3,4,5,6">
         <input type="submit" value="Сортировать">
     </form>
 
@@ -25,7 +25,7 @@ $array = parseInput($input);
         <?php $sorted = mergeSort($array); ?>
         <p>Отсортированный массив: [<?php echo implode(', ', $sorted); ?>]</p>
     <?php else: ?>
-        <p style="color: red;">Ошибка: введите числа через запятую</p>
+        <p style="color: red;">Ошибка: проверьте корректность вводимых данных</p>
     <?php endif; ?>
 
     <br>
