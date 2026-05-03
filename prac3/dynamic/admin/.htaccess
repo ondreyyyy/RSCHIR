@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Admin Area"
+AuthBasicProvider dbd
+Require valid-user

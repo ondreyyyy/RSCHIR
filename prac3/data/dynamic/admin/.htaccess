@@ -1,8 +1,0 @@
-AuthType Basic
-AuthName "Admin Area"
-Require valid-user
-
-<IfModule mod_headers.c>
-Header set X-Admin-Area "1"
-</IfModule>
-

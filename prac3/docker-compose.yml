@@ -1,56 +1,35 @@
+version: '3.8'
 services:
-  db:
-    image: mariadb:11
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -prootpass --silent"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-      start_period: 5s
-    container_name: prac3_db
-    restart: unless-stopped
-    environment:
-      - MARIADB_ROOT_PASSWORD=rootpass
-      - MARIADB_DATABASE=game_profiles
-      - MARIADB_USER=app
-      - MARIADB_PASSWORD=apppass
-    ports:
-      - "3306:3306"
+  nginx:
+    image: nginx:latest
     volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./static:/srv/www/static
+    ports:
+      - "80:80"
+    depends_on:
+      - apache
 
   apache:
     build:
-      context: ./apache
-      dockerfile: Dockerfile
-    container_name: prac3_apache
-    restart: unless-stopped
+      context: .
+      dockerfile: Dockerfile.apache
+    volumes:
+      - ./dynamic:/srv/www/dynamic
+      - ./apache.conf:/etc/apache2/sites-enabled/000-default.conf
     depends_on:
-      db:
-        condition: service_healthy
+      - db
+
+  db:
+    image: mysql:8
     environment:
-      - DB_HOST=db
-      - DB_NAME=game_profiles
-      - DB_USER=app
-      - DB_PASS=apppass
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: weather
+      MYSQL_USER: weatheruser
+      MYSQL_PASSWORD: weatherpass
     volumes:
-      - ./data/dynamic:/var/www/dynamic:rw
-    expose:
-      - "80"
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
-  nginx:
-    image: nginx:1.27-alpine
-    container_name: prac3_nginx
-    restart: unless-stopped
-    depends_on:
-      - apache
-    ports:
-      - "8080:80"
-    volumes:
-      - ./data/static:/var/www/static:ro
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-
-networks:
-  default:
-    name: prac3_net
-
+volumes:
+  db_data:
