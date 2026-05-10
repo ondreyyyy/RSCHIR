@@ -1,0 +1,9 @@
+FROM php:8.2-apache
+RUN apt-get update && \
+	apt-get install -y libaprutil1-dbd-mysql && \
+	a2enmod authn_dbd && \
+	a2enmod dbd && \
+	docker-php-ext-install pdo pdo_mysql
+COPY ./dynamic /srv/www/dynamic
+COPY apache.conf /etc/apache2/sites-enabled/000-default.conf
+RUN chown -R www-data:www-data /srv/www/dynamic
