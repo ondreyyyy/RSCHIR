@@ -17,8 +17,8 @@ if ($authUser === 'admin') {
     <p>Добро пожаловать, администратор!</p>
     <p>Сгенерировано сервером: <?php echo htmlspecialchars($now, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></p>
     <a href="/weather.php">Погода</a> |
-    <a href="/api.php">API</a> |
     <a href="/static/about.html">О погоде</a> |
-    <a href="/static/contacts.html">Контакты</a>
+    <a href="/static/contacts.html">Контакты</a> |
+    <a href="/api.php">API</a>
 </body>
 </html>

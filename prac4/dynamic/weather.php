@@ -27,9 +27,9 @@ while ($row = $stmt->fetch()) {
 echo "</ul>";
 ?>
     <nav>
-        <a href="/admin/admin.php">Админка</a> |
         <a href="/static/about.html">О погоде</a> |
-        <a href="/static/contacts.html">Контакты</a>
+        <a href="/static/contacts.html">Контакты</a> |
+        <a href="/admin/admin.php">Админка</a>
     </nav>
 </body>
 </html>
