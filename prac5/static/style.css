@@ -1,0 +1,54 @@
+body {
+	font-family: Arial, sans-serif;
+	background: #f0f0f0;
+	margin: 0;
+	padding: 20px;
+	color: #1a1a1a;
+}
+
+body[data-theme="dark"] {
+	background: #1f2937;
+	color: #f8fafc;
+}
+
+h1 {
+	color: #2a5d84;
+	margin-top: 0;
+}
+
+a {
+	color: #1a3d5c;
+	text-decoration: none;
+	margin-right: 10px;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+ul {
+	padding-left: 20px;
+}
+
+form {
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
+label {
+	display: block;
+	margin-bottom: 8px;
+}
+
+input[type="text"],
+select,
+input[type="file"] {
+	font: inherit;
+	padding: 4px 8px;
+	margin-left: 6px;
+}
+
+button {
+	font: inherit;
+	padding: 4px 10px;
+}
