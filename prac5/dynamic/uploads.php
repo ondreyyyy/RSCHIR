@@ -36,7 +36,13 @@ header('Content-Type: text/html; charset=utf-8');
 
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="action" value="upload">
-        <p><label><?php echo htmlspecialchars($ui['fileLabel'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?> <input type="file" name="pdf_file" accept="application/pdf,.pdf" required></label></p>
+        <p>
+            <label><?php echo htmlspecialchars($ui['fileLabel'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>
+                <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf,.pdf" required style="display:none" onchange="document.getElementById('file_name').textContent = this.value ? this.value.split('\\').pop() : '<?php echo htmlspecialchars($ui['noFileChosen'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>'">
+                <button type="button" onclick="document.getElementById('pdf_file').click()"><?php echo htmlspecialchars($ui['chooseFile'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></button>
+                <span id="file_name"><?php echo htmlspecialchars($ui['noFileChosen'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></span>
+            </label>
+        </p>
         <p><button type="submit"><?php echo htmlspecialchars($ui['uploadButton'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></button></p>
     </form>
 

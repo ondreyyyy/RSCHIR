@@ -20,13 +20,6 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS pdf_uploads (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    original_name VARCHAR(255) NOT NULL,
-    stored_name VARCHAR(255) NOT NULL,
-    size_bytes INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Пароль: adminpass, хэш в Apache-compatible SHA-формате
 INSERT INTO users (username, password) VALUES ('admin', '{SHA}dJE/XNX2HsC8/bd1QUwvs9FhtiA=');

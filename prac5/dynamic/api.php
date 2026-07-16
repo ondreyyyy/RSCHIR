@@ -19,16 +19,6 @@ function errorResponse(string $message, int $code = 400): void {
     jsonResponse(['error' => $message], $code);
 }
 
-function getPdo(): PDO {
-    static $pdo;
-    if ($pdo === null) {
-        $pdo = new PDO('mysql:host=db;dbname=weather;charset=utf8mb4', 'weatheruser', 'weatherpass', [
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
-        ]);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
-    return $pdo;
-}
 
 function requireAdminSession(): void {
     appStartSession();
@@ -119,7 +109,7 @@ function validateUserData(array $data, bool $requirePassword = true): array {
 }
 
 function getWeatherItems(?int $id = null) {
-    $pdo = getPdo();
+    $pdo = appGetPdo();
     if ($id === null) {
         $stmt = $pdo->query('SELECT id, city, temperature, description FROM weather ORDER BY id');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -135,7 +125,7 @@ function getWeatherItems(?int $id = null) {
 
 function createWeatherItem(array $data) {
     $validated = validateWeatherData($data);
-    $pdo = getPdo();
+    $pdo = appGetPdo();
     $stmt = $pdo->prepare('INSERT INTO weather (city, temperature, description) VALUES (:city, :temperature, :description)');
     $stmt->execute($validated);
     $id = (int) $pdo->lastInsertId();
@@ -144,7 +134,7 @@ function createWeatherItem(array $data) {
 
 function updateWeatherItem(int $id, array $data) {
     $validated = validateWeatherData($data);
-    $pdo = getPdo();
+    $pdo = appGetPdo();
     $stmt = $pdo->prepare('UPDATE weather SET city = :city, temperature = :temperature, description = :description WHERE id = :id');
     $stmt->execute([
         ':city' => $validated['city'],
@@ -159,7 +149,7 @@ function updateWeatherItem(int $id, array $data) {
 }
 
 function deleteWeatherItem(int $id): array {
-    $pdo = getPdo();
+    $pdo = appGetPdo();
     $stmt = $pdo->prepare('SELECT id FROM weather WHERE id = :id');
     $stmt->execute([':id' => $id]);
     if (!$stmt->fetch()) {
@@ -171,7 +161,7 @@ function deleteWeatherItem(int $id): array {
 }
 
 function getUsers(?int $id = null) {
-    $pdo = getPdo();
+    $pdo = appGetPdo();
     if ($id === null) {
         $stmt = $pdo->query('SELECT id, username FROM users ORDER BY id');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -187,7 +177,7 @@ function getUsers(?int $id = null) {
 
 function createUser(array $data) {
     $validated = validateUserData($data, true);
-    $pdo = getPdo();
+    $pdo = appGetPdo();
     try {
         $stmt = $pdo->prepare('INSERT INTO users (username, password) VALUES (:username, :password)');
         $stmt->execute([
@@ -206,7 +196,7 @@ function createUser(array $data) {
 
 function updateUser(int $id, array $data) {
     $validated = validateUserData($data, false);
-    $pdo = getPdo();
+    $pdo = appGetPdo();
     $fields = ['username' => $validated['username']];
     $params = [':username' => $validated['username'], ':id' => $id];
     $sql = 'UPDATE users SET username = :username';
@@ -231,7 +221,7 @@ function updateUser(int $id, array $data) {
 }
 
 function deleteUser(int $id): array {
-    $pdo = getPdo();
+    $pdo = appGetPdo();
     $stmt = $pdo->prepare('SELECT id FROM users WHERE id = :id');
     $stmt->execute([':id' => $id]);
     if (!$stmt->fetch()) {
@@ -242,9 +232,9 @@ function deleteUser(int $id): array {
     return ['message' => 'Пользователь удалён.', 'id' => $id];
 }
 
-function renderApiPage(string $language): void {
+function renderApiPage(array $preferences, string $language): void {
     $ui = appUiText($language);
-    $html = '<!DOCTYPE html><html lang="' . htmlspecialchars($language, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"><head><meta charset="UTF-8"><title>' . htmlspecialchars($ui['apiTitle'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</title><link rel="stylesheet" href="/static/style.css"></head><body>';
+    $html = '<!DOCTYPE html><html lang="' . htmlspecialchars($language, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '" data-theme="' . htmlspecialchars($preferences['theme'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"><head><meta charset="UTF-8"><title>' . htmlspecialchars($ui['apiTitle'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</title><link rel="stylesheet" href="/static/style.css"></head><body data-theme="' . htmlspecialchars($preferences['theme'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '">';
     $html .= '<h1>' . htmlspecialchars($ui['apiTitle'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</h1>';
     $html .= '<p>' . htmlspecialchars($ui['apiIntro'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' <code>/api.php/weather</code>, <code>/api.php/users</code> и <code>/api.php/uploads</code>.</p>';
     $html .= '<h2>' . htmlspecialchars($ui['apiWeatherHeader'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</h2><ul>';
@@ -283,7 +273,7 @@ $body = getRequestBody();
 
 if ($resource === '' && $method === 'GET') {
     $preferences = appGetPreferences();
-    renderApiPage($preferences['language']);
+    renderApiPage($preferences, $preferences['language']);
 }
 
 try {
