@@ -78,6 +78,15 @@ function validateWeatherData(array $data): array {
     if (empty($data['description'])) {
         $errors[] = 'Поле description обязательно.';
     }
+    if (!isset($data['humidity']) || !is_numeric($data['humidity'])) {
+        $errors[] = 'Поле humidity должно быть числом.';
+    }
+    if (!isset($data['pressure']) || !is_numeric($data['pressure'])) {
+        $errors[] = 'Поле pressure должно быть числом.';
+    }
+    if (empty($data['recorded_at'])) {
+        $errors[] = 'Поле recorded_at обязательно.';
+    }
     if ($errors) {
         errorResponse(implode(' ', $errors), 422);
     }
@@ -85,6 +94,9 @@ function validateWeatherData(array $data): array {
         'city' => trim($data['city']),
         'temperature' => (float) $data['temperature'],
         'description' => trim($data['description']),
+        'humidity' => (int) $data['humidity'],
+        'pressure' => (int) $data['pressure'],
+        'recorded_at' => trim($data['recorded_at']),
     ];
 }
 
@@ -111,10 +123,10 @@ function validateUserData(array $data, bool $requirePassword = true): array {
 function getWeatherItems(?int $id = null) {
     $pdo = appGetPdo();
     if ($id === null) {
-        $stmt = $pdo->query('SELECT id, city, temperature, description FROM weather ORDER BY id');
+        $stmt = $pdo->query('SELECT id, city, temperature, description, humidity, pressure, recorded_at FROM weather ORDER BY id');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    $stmt = $pdo->prepare('SELECT id, city, temperature, description FROM weather WHERE id = :id');
+    $stmt = $pdo->prepare('SELECT id, city, temperature, description, humidity, pressure, recorded_at FROM weather WHERE id = :id');
     $stmt->execute([':id' => $id]);
     $item = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$item) {
@@ -126,7 +138,7 @@ function getWeatherItems(?int $id = null) {
 function createWeatherItem(array $data) {
     $validated = validateWeatherData($data);
     $pdo = appGetPdo();
-    $stmt = $pdo->prepare('INSERT INTO weather (city, temperature, description) VALUES (:city, :temperature, :description)');
+    $stmt = $pdo->prepare('INSERT INTO weather (city, temperature, description, humidity, pressure, recorded_at) VALUES (:city, :temperature, :description, :humidity, :pressure, :recorded_at)');
     $stmt->execute($validated);
     $id = (int) $pdo->lastInsertId();
     return getWeatherItems($id);
@@ -135,11 +147,14 @@ function createWeatherItem(array $data) {
 function updateWeatherItem(int $id, array $data) {
     $validated = validateWeatherData($data);
     $pdo = appGetPdo();
-    $stmt = $pdo->prepare('UPDATE weather SET city = :city, temperature = :temperature, description = :description WHERE id = :id');
+    $stmt = $pdo->prepare('UPDATE weather SET city = :city, temperature = :temperature, description = :description, humidity = :humidity, pressure = :pressure, recorded_at = :recorded_at WHERE id = :id');
     $stmt->execute([
         ':city' => $validated['city'],
         ':temperature' => $validated['temperature'],
         ':description' => $validated['description'],
+        ':humidity' => $validated['humidity'],
+        ':pressure' => $validated['pressure'],
+        ':recorded_at' => $validated['recorded_at'],
         ':id' => $id,
     ]);
     if ($stmt->rowCount() === 0) {
@@ -236,7 +251,7 @@ function renderApiPage(array $preferences, string $language): void {
     $ui = appUiText($language);
     $html = '<!DOCTYPE html><html lang="' . htmlspecialchars($language, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '" data-theme="' . htmlspecialchars($preferences['theme'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"><head><meta charset="UTF-8"><title>' . htmlspecialchars($ui['apiTitle'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</title><link rel="stylesheet" href="/static/style.css"></head><body data-theme="' . htmlspecialchars($preferences['theme'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '">';
     $html .= '<h1>' . htmlspecialchars($ui['apiTitle'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</h1>';
-    $html .= '<p>' . htmlspecialchars($ui['apiIntro'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' <code>/api.php/weather</code>, <code>/api.php/users</code> и <code>/api.php/uploads</code>.</p>';
+    $html .= '<p>' . htmlspecialchars($ui['apiIntro'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' <code>/api.php/weather</code>, <code>/api.php/users</code> ' . htmlspecialchars($ui['apiAnd'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' <code>/api.php/uploads</code>.</p>';
     $html .= '<h2>' . htmlspecialchars($ui['apiWeatherHeader'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</h2><ul>';
     $html .= '<li>GET /api.php/weather — ' . htmlspecialchars($language === 'en' ? 'list all records' : 'список всех записей', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</li>';
     $html .= '<li>GET /api.php/weather/{id} — ' . htmlspecialchars($language === 'en' ? 'get record by id' : 'получить запись по id', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</li>';
@@ -318,8 +333,24 @@ try {
                     errorResponse('Метод не поддерживается для ресурса users.', 405);
             }
             break;
+        case 'uploads':
+            switch ($method) {
+                case 'GET':
+                    if ($id === null) {
+                        jsonResponse(appListPdfFiles());
+                    }
+                    $files = appListPdfFiles();
+                    $file = $files[$id] ?? null;
+                    if ($file === null) {
+                        errorResponse('Файл не найден.', 404);
+                    }
+                    jsonResponse($file);
+                default:
+                    errorResponse('Метод не поддерживается для ресурса uploads.', 405);
+            }
+            break;
         default:
-            errorResponse('Ресурс не найден. Используйте /api.php/weather или /api.php/users.', 404);
+            errorResponse('Ресурс не найден. Используйте /api.php/weather, /api.php/users ' . ($language === 'en' ? 'or' : 'или') . ' /api.php/uploads.', 404);
     }
 } catch (PDOException $e) {
     errorResponse('Внутренняя ошибка сервера: ' . $e->getMessage(), 500);

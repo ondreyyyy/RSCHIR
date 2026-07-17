@@ -129,26 +129,6 @@ function appFetchWeatherRows(): array {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function appWeatherStats(array $weatherRows): array {
-    if ($weatherRows === []) {
-        return [
-            'count' => 0,
-            'min' => null,
-            'max' => null,
-            'average' => null,
-        ];
-    }
-
-    $temperatures = array_map(static fn(array $row): float => (float) $row['temperature'], $weatherRows);
-
-    return [
-        'count' => count($weatherRows),
-        'min' => min($temperatures),
-        'max' => max($temperatures),
-        'average' => round(array_sum($temperatures) / count($temperatures), 1),
-    ];
-}
-
 function appStorageRoot(): string {
     return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'storage';
 }
@@ -249,72 +229,6 @@ function appSendPdfFile(string $fileName): void {
     exit;
 }
 
-function appTranslation(string $language): array {
-    $translations = [
-        'ru' => [
-            'portalTitle' => 'Погодный портал',
-            'intro' => 'Сайт показывает погоду, персонализирует контент по cookie и хранит сессию в Redis.',
-            'preferencesTitle' => 'Настройки пользователя',
-            'loginLabel' => 'Логин',
-            'languageLabel' => 'Язык',
-            'themeLabel' => 'Тема',
-            'saveButton' => 'Сохранить настройки',
-            'themeLight' => 'Светлая',
-            'themeDark' => 'Тёмная',
-            'weatherTitle' => 'Погода в городах',
-            'uploadTitle' => 'PDF-файлы',
-            'fileLabel' => 'PDF-файл',
-            'availableFiles' => 'Доступные файлы',
-            'uploadButton' => 'Загрузить PDF',
-            'downloadButton' => 'Скачать',
-            'cityHeader' => 'Город',
-            'weatherHeader' => 'Погода',
-            'greeting' => 'Добро пожаловать',
-            'navWeather' => 'Weather',
-            'navPdf' => 'PDF files',
-            'navAbout' => 'About weather',
-            'navContacts' => 'Contacts',
-            'navAdmin' => 'Admin',
-            'navApi' => 'API',
-            'navStats' => 'Statistics',
-            'weatherCityHeader' => 'City',
-            'weatherTempHeader' => 'Temperature',
-            'weatherDescHeader' => 'Description',
-            'weatherHumidityHeader' => 'Humidity',
-            'weatherPressureHeader' => 'Pressure',
-            'weatherDateHeader' => 'Date',
-        ],
-        'en' => [
-            'portalTitle' => 'Weather portal',
-            'intro' => 'The site shows weather, personalizes content with cookies, and keeps the session in Redis.',
-            'preferencesTitle' => 'User preferences',
-            'loginLabel' => 'Login',
-            'languageLabel' => 'Language',
-            'themeLabel' => 'Theme',
-            'saveButton' => 'Save preferences',
-            'themeLight' => 'Light',
-            'themeDark' => 'Dark',
-            'weatherTitle' => 'Weather by city',
-            'uploadTitle' => 'PDF files',
-            'fileLabel' => 'PDF file',
-            'availableFiles' => 'Available files',
-            'uploadButton' => 'Upload PDF',
-            'downloadButton' => 'Download',
-            'cityHeader' => 'City',
-            'weatherHeader' => 'Weather',
-            'greeting' => 'Welcome',
-            'navWeather' => 'Weather',
-            'navPdf' => 'PDF files',
-            'navAbout' => 'About weather',
-            'navContacts' => 'Contacts',
-            'navAdmin' => 'Admin',
-            'navApi' => 'API',
-        ],
-    ];
-
-    return $translations[$language] ?? $translations['ru'];
-}
-
 function appVerifyAdminPassword(string $login, string $password): bool {
     $stmt = appGetPdo()->prepare('SELECT username, password FROM users WHERE username = :username LIMIT 1');
     $stmt->execute([':username' => $login]);
@@ -330,46 +244,6 @@ function appVerifyAdminPassword(string $login, string $password): bool {
     }
 
     return password_verify($password, $storedPassword);
-}
-
-function appHandleAdminLoginForm(): bool {
-    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
-        return false;
-    }
-
-    if (($_POST['action'] ?? '') !== 'admin-login') {
-        return false;
-    }
-
-    appStartSession();
-    $login = appNormalizeLogin($_POST['login'] ?? null);
-    $password = (string) ($_POST['password'] ?? '');
-
-    if ($login === 'admin' && appVerifyAdminPassword($login, $password)) {
-        $_SESSION['admin'] = true;
-        $_SESSION['admin_login'] = $login;
-        $_SESSION['login'] = 'admin';
-        header('Location: /admin/admin.php');
-        exit;
-    }
-
-    return true;
-}
-
-function appIsAdminAuthenticated(): bool {
-    appStartSession();
-    return !empty($_SESSION['admin']) && $_SESSION['admin'] === true && (($_SESSION['admin_login'] ?? '') === 'admin');
-}
-
-function appFormatBytes(int $bytes): string {
-    if ($bytes < 1024) {
-        return $bytes . ' B';
-    }
-    if ($bytes < 1024 * 1024) {
-        return round($bytes / 1024, 1) . ' KB';
-    }
-
-    return round($bytes / (1024 * 1024), 1) . ' MB';
 }
 
 function appUiText(string $language): array {
@@ -412,13 +286,13 @@ function appUiText(string $language): array {
             'invalidCredentials' => 'Неверный логин или пароль.',
             'apiTitle' => 'Интерфейс API',
             'apiIntro' => 'Используйте JSON-запросы к',
+            'apiAnd' => 'и',
+            'apiOr' => 'или',
             'apiWeatherHeader' => 'Погода',
             'apiUsersHeader' => 'Пользователи',
             'apiPdfHeader' => 'PDF-файлы',
             'apiNote' => 'Для POST/PUT отправляйте JSON. Пример для создания погоды:',
             'greeting' => 'Добро пожаловать',
-            'fileLabel'      => 'PDF-файл',
-            'availableFiles' => 'Доступные файлы',
             'navWeather'     => 'Погода',
             'navPdf'         => 'PDF-файлы',
             'navAbout'       => 'О погоде',
@@ -470,13 +344,13 @@ function appUiText(string $language): array {
             'invalidCredentials' => 'Invalid username or password.',
             'apiTitle' => 'API interface',
             'apiIntro' => 'Use JSON requests to',
+            'apiAnd' => 'and',
+            'apiOr' => 'or',
             'apiWeatherHeader' => 'Weather',
             'apiUsersHeader' => 'Users',
             'apiPdfHeader' => 'PDF files',
             'apiNote' => 'Send JSON for POST/PUT. Example for creating weather:',
             'greeting' => 'Welcome',
-            'fileLabel'      => 'PDF file',
-            'availableFiles' => 'Available files',
             'navWeather'     => 'Weather',
             'navPdf'         => 'PDF files',
             'navAbout'       => 'About weather',
@@ -597,6 +471,10 @@ function appBuildCharts(array $rows): array {
     $storageDir = appStorageRoot() . DIRECTORY_SEPARATOR . 'charts';
     if (!is_dir($storageDir)) {
         mkdir($storageDir, 0775, true);
+    }
+
+    foreach (glob($storageDir . DIRECTORY_SEPARATOR . '*.png') as $oldChart) {
+        @unlink($oldChart);
     }
 
     $baseName = date('Ymd_His');
