@@ -5,7 +5,7 @@ namespace App\Infrastructure\Charts;
 
 use GdImage;
 
-abstract class AbstractGdChart implements ChartRenderer
+abstract class AbstractGdChart
 {
     protected function createImage(int $width, int $height): GdImage
     {

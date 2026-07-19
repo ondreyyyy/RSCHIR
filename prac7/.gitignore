@@ -1,1 +1,5 @@
 /vendor/
+/storage/charts/*
+!/storage/charts/.gitkeep
+/storage/pdfs/*
+!/storage/pdfs/.gitkeep

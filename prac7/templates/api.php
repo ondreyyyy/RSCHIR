@@ -22,4 +22,4 @@
     <li>GET /api/uploads — <?php echo htmlspecialchars($preferences['language'] === 'en' ? 'list uploaded PDF files' : 'список загруженных PDF', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></li>
     <li>GET /api/uploads/{id} — <?php echo htmlspecialchars($preferences['language'] === 'en' ? 'PDF metadata' : 'метаданные PDF', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></li>
 </ul>
-<p><?php echo htmlspecialchars($ui['apiNote'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></p><pre>{"city":"Казань","temperature":20.5,"description":"Солнечно"}</pre>
+<p><?php echo htmlspecialchars($ui['apiNote'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></p><pre>{"city":"Казань","temperature":20.5,"description":"Ясно","humidity":60,"pressure":1010,"recorded_at":"2026-07-19"}</pre>
