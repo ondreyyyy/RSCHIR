@@ -1,0 +1,14 @@
+{
+    "name": "rschir/weather-backend-project",
+    "description": "Weather backend project with API, statistics, and file management",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "fakerphp/faker": "^1.23"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

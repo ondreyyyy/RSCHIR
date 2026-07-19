@@ -1,0 +1,38 @@
+FROM php:8.2-apache
+
+RUN apt-get update && \
+	apt-get install -y --no-install-recommends \
+		libaprutil1-dbd-mysql \
+		$PHPIZE_DEPS \
+		libpng-dev \
+		libjpeg-dev \
+		libfreetype-dev \
+		libzip-dev \
+		zip \
+		unzip \
+		git \
+		fonts-liberation && \
+	pecl install redis && \
+	docker-php-ext-enable redis && \
+	a2enmod authn_dbd && \
+	a2enmod dbd && \
+	docker-php-ext-configure gd --with-freetype --with-jpeg && \
+	docker-php-ext-install pdo pdo_mysql gd zip && \
+	rm -rf /var/lib/apt/lists/*
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+	php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+	php -r "unlink('composer-setup.php');"
+
+WORKDIR /srv/www
+
+COPY composer.json ./
+COPY src/ ./src/
+COPY public/ ./public/
+COPY templates/ ./templates/
+COPY storage/ ./storage/
+
+RUN composer install --no-dev --no-interaction && \
+	chown -R www-data:www-data /srv/www/public /srv/www/storage
+
+COPY apache.conf /etc/apache2/sites-enabled/000-default.conf
