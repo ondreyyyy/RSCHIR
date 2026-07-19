@@ -82,7 +82,7 @@ final class Container
 
     public function chartService(): ChartService
     {
-        return $this->shared(ChartService::class, fn(): ChartService => new ChartService(new ChartWatermark()));
+        return $this->shared(ChartService::class, fn(): ChartService => new ChartService(new ChartWatermark(), $this->config));
     }
 
     /**

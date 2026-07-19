@@ -9,19 +9,19 @@
 <head>
     <meta charset="UTF-8">
     <title><?php echo htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body data-theme="<?php echo htmlspecialchars($preferences['theme'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>">
     <?php echo $body; ?>
     <nav>
-        <a href="/weather.php"><?php echo htmlspecialchars($ui['navWeather'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
-        <a href="/statistics.php"><?php echo htmlspecialchars($ui['navStats'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
-        <a href="/uploads.php"><?php echo htmlspecialchars($ui['navPdf'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
-        <a href="/about.php"><?php echo htmlspecialchars($ui['navAbout'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
-        <a href="/contacts.php"><?php echo htmlspecialchars($ui['navContacts'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
-        <a href="/admin/admin.php"><?php echo htmlspecialchars($ui['navAdmin'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a>
+        <a href="/weather"><?php echo htmlspecialchars($ui['navWeather'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
+        <a href="/statistics"><?php echo htmlspecialchars($ui['navStats'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
+        <a href="/uploads"><?php echo htmlspecialchars($ui['navPdf'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
+        <a href="/about"><?php echo htmlspecialchars($ui['navAbout'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
+        <a href="/contacts"><?php echo htmlspecialchars($ui['navContacts'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a> |
+        <a href="/admin"><?php echo htmlspecialchars($ui['navAdmin'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a>
         <?php if (($preferences['login'] ?? '') === 'admin'): ?>
-            | <a href="/api.php"><?php echo htmlspecialchars($ui['apiLink'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a>
+            | <a href="/api"><?php echo htmlspecialchars($ui['apiLink'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a>
         <?php endif; ?>
     </nav>
 </body>

@@ -18,9 +18,9 @@ final class StatisticsController extends AbstractController
         $charts = $this->container->chartService()->build($rows);
 
         $chartUrls = [
-            'bar' => '/chart.php?file=' . rawurlencode(basename($charts['bar'])),
-            'line' => '/chart.php?file=' . rawurlencode(basename($charts['line'])),
-            'pie' => '/chart.php?file=' . rawurlencode(basename($charts['pie'])),
+            'bar' => '/chart?file=' . rawurlencode(basename($charts['bar'])),
+            'line' => '/chart?file=' . rawurlencode(basename($charts['line'])),
+            'pie' => '/chart?file=' . rawurlencode(basename($charts['pie'])),
         ];
 
         $this->renderPage('statsTitle', 'statistics', [

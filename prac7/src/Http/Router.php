@@ -46,6 +46,22 @@ final class Router
     }
 
     /**
+     * @param string|array{0:class-string,1:string} $handler
+     */
+    public function put(string $path, $handler): void
+    {
+        $this->add('PUT', $path, $handler);
+    }
+
+    /**
+     * @param string|array{0:class-string,1:string} $handler
+     */
+    public function delete(string $path, $handler): void
+    {
+        $this->add('DELETE', $path, $handler);
+    }
+
+    /**
      * @return array{handler:string,params:array}|null
      */
     public function match(string $method, string $path): ?array

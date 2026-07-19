@@ -28,7 +28,7 @@
     <?php foreach ($pdfFiles as $file): ?>
         <li>
             <?php echo htmlspecialchars($file->name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>
-            (<a href="/download.php?file=<?php echo rawurlencode($file->name); ?>"><?php echo htmlspecialchars($ui['downloadButton'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a>)
+            (<a href="/download?file=<?php echo rawurlencode($file->name); ?>"><?php echo htmlspecialchars($ui['downloadButton'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a>)
         </li>
     <?php endforeach; ?>
     <?php if ($pdfFiles === []): ?>

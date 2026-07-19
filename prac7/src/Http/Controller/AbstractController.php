@@ -37,13 +37,15 @@ abstract class AbstractController
         $preferences = $this->preferences();
         $ui = $this->ui->get($preferences->language);
 
+        $preferencesArray = $preferences->toArray();
+
         $body = $this->view->render($bodyTemplate, array_merge($data, [
-            'preferences' => $preferences,
+            'preferences' => $preferencesArray,
             'ui' => $ui,
         ]));
 
         $html = $this->view->render('layout', [
-            'preferences' => $preferences,
+            'preferences' => $preferencesArray,
             'ui' => $ui,
             'title' => $ui[$titleKey] ?? $titleKey,
             'body' => $body,
