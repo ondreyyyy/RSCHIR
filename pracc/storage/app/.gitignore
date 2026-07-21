@@ -1,0 +1,9 @@
+*
+!public/
+!pdfs/
+!charts/
+pdfs/*
+charts/*
+!pdfs/.gitkeep
+!charts/.gitkeep
+!.gitignore

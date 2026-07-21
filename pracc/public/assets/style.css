@@ -1,0 +1,8 @@
+body[data-theme="dark"] {
+    background: #3c3c3c;
+    color: #ffffff;
+}
+
+body[data-theme="dark"] a {
+    color: #5b9bd5;
+}

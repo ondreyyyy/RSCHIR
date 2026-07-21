@@ -1,0 +1,40 @@
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - apache
+
+  apache:
+    build:
+      context: .
+      dockerfile: Dockerfile.apache
+    volumes:
+      - ./.env:/srv/www/.env:ro
+      - ./storage/app:/srv/www/storage/app
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: weather
+      MYSQL_USER: weatheruser
+      MYSQL_PASSWORD: weatherpass
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+volumes:
+  db_data:
+  redis_data:
